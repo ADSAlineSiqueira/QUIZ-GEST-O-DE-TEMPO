@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Quiz - Gestão de Tempo e Tecnologia</title>
+
+<style>
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(135deg, #0f172a, #1e40af);
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+}
+
+/* Caixa principal */
+.container {
+    background: white;
+    color: #1f2937;
+    width: 90%;
+    max-width: 800px;
+    padding: 35px;
+    border-radius: 20px;
+    box-shadow: 0 0 25px rgba(0,0,0,0.4);
+    text-align: center;
+}
+
+/* Título */
+h1 {
+    color: #1e40af;
+    margin-bottom: 10px;
+}
+
+.subtitulo {
+    color: #555;
+    margin-bottom: 25px;
+    font-size: 17px;
+}
+
+/* Progresso e pontuação */
+.info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 20px;
+    color: #374151;
+    font-weight: bold;
+}
+
+#pergunta {
+    font-size: 23px;
+    margin-bottom: 25px;
+    min-height: 80px;
+}
+
+/* Botões das alternativas */
+button {
+    width: 100%;
+    padding: 15px;
+    margin: 9px 0;
+    border: none;
+    border-radius: 12px;
+    background: #2563eb;
+    color: white;
+    font-size: 16px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+button:hover {
+    background: #1d4ed8;
+    transform: scale(1.01);
+}
+
+/* Mensagem de certo ou errado */
+#resultado {
+    margin-top: 20px;
+    font-size: 21px;
+    font-weight: bold;
+}
+
+/* Tela final */
+.final {
+    font-size: 23px;
+    margin-top: 20px;
+}
+
+.dica {
+    margin-top: 20px;
+    background: #eff6ff;
+    padding: 18px;
+    border-radius: 12px;
+    color: #1e40af;
+    font-weight: bold;
+    line-height: 1.5;
+}
+
+.resposta-correta {
+    margin-top: 10px;
+    font-size: 16px;
+    color: #374151;
+}
+
+/* Botão de reiniciar */
+.reiniciar {
+    background: #16a34a;
+    margin-top: 25px;
+}
+
+.reiniciar:hover {
+    background: #15803d;
+}
+
+@media (max-width: 600px) {
+    .info {
+        flex-direction: column;
+    }
+
+    #pergunta {
+        font-size: 20px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>🎮 Quiz: Gestão de Tempo e Tecnologia</h1>
+
+    <p class="subtitulo">
+        Responda às perguntas e descubra se você sabe usar a tecnologia a favor da sua produtividade.
+    </p>
+
+    <div class="info">
+        <div id="progresso"></div>
+        <div>Pontos: <span id="pontos">0</span></div>
+    </div>
+
+    <div id="pergunta"></div>
+
+    <div id="opcoes"></div>
+
+    <div id="resultado"></div>
+
+</div>
+
+<script>
+
+const perguntas = [
+
+{
+    pergunta: "1. Qual é o principal objetivo da gestão de tempo?",
+    opcoes: [
+        "Preencher todos os horários do dia com tarefas",
+        "Organizar prioridades para usar melhor o tempo disponível",
+        "Trabalhar mais horas para produzir mais",
+        "Evitar qualquer tipo de pausa durante as atividades"
+    ],
+    correta: 1,
+    explicacao: "Gestão de tempo não significa fazer tudo, mas organizar prioridades e usar melhor o tempo disponível."
+},
+
+{
+    pergunta: "2. Como a tecnologia pode ajudar na gestão de tempo?",
+    opcoes: [
+        "Substituindo totalmente o planejamento pessoal",
+        "Permitindo organizar tarefas, lembretes e prazos",
+        "Fazendo todas as atividades automaticamente",
+        "Aumentando o número de notificações durante o dia"
+    ],
+    correta: 1,
+    explicacao: "Ferramentas digitais ajudam a organizar compromissos, tarefas, prazos e lembretes."
+},
+
+{
+    pergunta: "3. Qual atitude representa um uso inadequado da tecnologia?",
+    opcoes: [
+        "Usar agenda digital para marcar compromissos",
+        "Ativar lembretes para prazos importantes",
+        "Interromper estudos constantemente para checar notificações",
+        "Usar aplicativos para listar tarefas"
+    ],
+    correta: 2,
+    explicacao: "As notificações constantes quebram o foco e prejudicam a produtividade."
+},
+
+{
+    pergunta: "4. O que significa priorizar tarefas?",
+    opcoes: [
+        "Fazer primeiro as tarefas mais fáceis",
+        "Fazer várias tarefas ao mesmo tempo",
+        "Escolher o que é mais importante ou urgente para realizar primeiro",
+        "Deixar as tarefas difíceis para o final do dia"
+    ],
+    correta: 2,
+    explicacao: "Priorizar é identificar o que tem mais importância, urgência ou impacto."
+},
+
+{
+    pergunta: "5. Qual das opções representa melhor a Técnica Pomodoro?",
+    opcoes: [
+        "Trabalhar sem pausa até finalizar tudo",
+        "Dividir o tempo em períodos de foco e pequenas pausas",
+        "Estudar apenas quando estiver motivado",
+        "Fazer várias tarefas ao mesmo tempo para ganhar tempo"
+    ],
+    correta: 1,
+    explicacao: "O Pomodoro usa períodos de concentração, geralmente 25 minutos, seguidos de pequenas pausas."
+},
+
+{
+    pergunta: "6. Em um projeto de ADS, qual prática ajuda na gestão de tempo da equipe?",
+    opcoes: [
+        "Cada pessoa trabalhar sem informar o andamento",
+        "Começar a programar sem dividir tarefas",
+        "Dividir atividades, definir prazos e acompanhar o progresso",
+        "Deixar os testes somente para o dia da entrega"
+    ],
+    correta: 2,
+    explicacao: "Em projetos de tecnologia, dividir tarefas e acompanhar o progresso evita atrasos e retrabalho."
+},
+
+{
+    pergunta: "7. Qual é uma consequência comum da má gestão de tempo?",
+    opcoes: [
+        "Redução da ansiedade e mais equilíbrio",
+        "Acúmulo de tarefas, atrasos e aumento do estresse",
+        "Melhor organização da rotina",
+        "Mais clareza sobre prioridades"
+    ],
+    correta: 1,
+    explicacao: "Quando o tempo não é bem administrado, tarefas se acumulam e o estresse aumenta."
+},
+
+{
+    pergunta: "8. O que é mais adequado ao usar ferramentas digitais de organização?",
+    opcoes: [
+        "Anotar tudo sem revisar depois",
+        "Usar muitas ferramentas ao mesmo tempo sem critério",
+        "Escolher uma ferramenta simples e revisar as tarefas com frequência",
+        "Confiar apenas nos lembretes automáticos"
+    ],
+    correta: 2,
+    explicacao: "O ideal é usar uma ferramenta prática e revisar regularmente as tarefas e prioridades."
+},
+
+{
+    pergunta: "9. Qual situação mostra uma boa relação entre tecnologia e produtividade?",
+    opcoes: [
+        "Usar o celular durante toda a aula para acompanhar redes sociais",
+        "Usar calendário digital para organizar estudos, trabalho e descanso",
+        "Responder todas as mensagens assim que chegam",
+        "Abrir vários aplicativos ao mesmo tempo para parecer produtivo"
+    ],
+    correta: 1,
+    explicacao: "O calendário digital pode ajudar a visualizar melhor a rotina e equilibrar compromissos."
+},
+
+{
+    pergunta: "10. Qual frase resume melhor a relação entre gestão de tempo e tecnologia?",
+    opcoes: [
+        "A tecnologia sempre melhora a produtividade",
+        "A tecnologia sempre atrapalha a concentração",
+        "A tecnologia é útil quando usada com planejamento e propósito",
+        "Quanto mais aplicativos, melhor será a organização"
+    ],
+    correta: 2,
+    explicacao: "A tecnologia pode ajudar ou atrapalhar. Tudo depende de como ela é usada."
+}
+
+];
+
+let perguntaAtual = 0;
+let pontos = 0;
+
+function mostrarPergunta() {
+
+    document.getElementById("resultado").innerHTML = "";
+
+    if (perguntaAtual >= perguntas.length) {
+        finalizarQuiz();
+        return;
+    }
+
+    let pergunta = perguntas[perguntaAtual];
+
+    document.getElementById("progresso").innerHTML =
+        `Pergunta ${perguntaAtual + 1} de ${perguntas.length}`;
+
+    document.getElementById("pergunta").innerHTML =
+        pergunta.pergunta;
+
+    let opcoesHTML = "";
+
+    pergunta.opcoes.forEach((opcao, index) => {
+        opcoesHTML += `
+            <button onclick="responder(${index})">
+                ${opcao}
+            </button>
+        `;
+    });
+
+    document.getElementById("opcoes").innerHTML = opcoesHTML;
+}
+
+function responder(respostaEscolhida) {
+
+    let pergunta = perguntas[perguntaAtual];
+
+    if (respostaEscolhida === pergunta.correta) {
+
+        pontos += 10;
+
+        document.getElementById("resultado").innerHTML =
+            `
+            ✅ Resposta correta!
+            <div class="resposta-correta">
+                ${pergunta.explicacao}
+            </div>
+            `;
+
+    } else {
+
+        document.getElementById("resultado").innerHTML =
+            `
+            ❌ Resposta incorreta!
+            <div class="resposta-correta">
+                Resposta correta: ${pergunta.opcoes[pergunta.correta]}<br>
+                ${pergunta.explicacao}
+            </div>
+            `;
+
+    }
+
+    document.getElementById("pontos").innerHTML = pontos;
+
+    perguntaAtual++;
+
+    setTimeout(() => {
+        mostrarPergunta();
+    }, 2500);
+}
+
+function finalizarQuiz() {
+
+    document.getElementById("progresso").innerHTML = "";
+    document.getElementById("pergunta").innerHTML = "🎉 Quiz Finalizado!";
+    document.getElementById("opcoes").innerHTML = "";
+
+    let mensagem = "";
+    let dica = "";
+
+    if (pontos >= 80) {
+        mensagem = "🏆 Excelente resultado!";
+        dica = "Você compreende bem como usar a tecnologia a favor da gestão de tempo.";
+    } else if (pontos >= 50) {
+        mensagem = "⚠️ Bom desempenho!";
+        dica = "Você entende o tema, mas ainda pode melhorar sua organização e controle de distrações.";
+    } else {
+        mensagem = "🚨 Atenção!";
+        dica = "É importante rever seus hábitos digitais e aprender a planejar melhor sua rotina.";
+    }
+
+    document.getElementById("resultado").innerHTML = `
+        <div class="final">
+            Sua pontuação final foi: ${pontos} pontos
+        </div>
+
+        <div class="final">
+            ${mensagem}
+        </div>
+
+        <div class="dica">
+            💡 ${dica}
+        </div>
+
+        <button class="reiniciar" onclick="reiniciarQuiz()">
+            Jogar novamente
+        </button>
+    `;
+}
+
+function reiniciarQuiz() {
+    perguntaAtual = 0;
+    pontos = 0;
+    document.getElementById("pontos").innerHTML = pontos;
+    mostrarPergunta();
+}
+
+mostrarPergunta();
+
+</script>
+
+</body>
+</html>
